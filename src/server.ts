@@ -8,6 +8,7 @@ import router from './routes/v1';
 import { errorHandler } from './middlewares/error.handler';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 import { v2 as cloudinary } from 'cloudinary';
 
@@ -19,10 +20,12 @@ cloudinary.config({
 
 const app = express();
 
+app.use(cors());
 app.use(cookieParser(process.env.JWT_SECRET));
 app.use(bodyParser.json());
 app.use(router);
 app.use(errorHandler);
+
 app.listen(3000, () => {
     console.log(`Server working on port ${process.env.PORT} 🚀`);
 });

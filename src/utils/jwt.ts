@@ -4,7 +4,7 @@ import { INTERNAL_SERVER_ERROR } from 'http-status';
 import { TokenUser } from './authUtils';
 import { Response } from 'express';
 
-export const generateJWT = async (payload: Object) => {
+export const generateJWT = (payload: Object) => {
     let token = '';
 
     if (process.env.JWT_SECRET)
@@ -35,7 +35,7 @@ export const attachCookiesToResponse = (
     user: TokenUser,
     refreshToken: string
 ) => {
-    const accessTokenJWT = generateJWT(user);
+    const accessTokenJWT = generateJWT({ user });
     const refreshTokenJWT = generateJWT({ user, refreshToken });
 
     const oneDay = 1000 * 60 * 60 * 24;

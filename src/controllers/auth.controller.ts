@@ -17,7 +17,7 @@ import { attachCookiesToResponse } from '@utils/jwt';
 
 export const signUp = async (req: Request, res: Response) => {
     const { username, email, password, confirmPassword } = req.body;
-    console.log(req.body)
+    console.log(req.body);
     if (!username || !email || !password || !confirmPassword)
         throw new ApiError(BAD_REQUEST, 'Provide all of the fields!');
 
@@ -52,6 +52,11 @@ export const signUp = async (req: Request, res: Response) => {
             password: cryptedPassword,
             username,
             verificationToken,
+            stream: {
+                create: {
+                    name: `${username}'s stream`,
+                },
+            },
         },
     });
     await sendVerificationEmail({
@@ -67,12 +72,13 @@ export const signUp = async (req: Request, res: Response) => {
             username: user.username,
             email: user.email,
         },
-        message: 'GREAT! Verify your email!'
+        message: 'GREAT! Verify your email!',
     });
 };
 
 export const verifyEmail = async (req: Request, res: Response) => {
     const { verificationToken, email } = req.body;
+    console.log(verificationToken, email);
     let user = await db.user.findUnique({
         where: {
             email,
@@ -103,7 +109,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
             username: user.username,
             email: user.email,
         },
-        message: 'GREAT! Email verified!'
+        message: 'GREAT! Email verified!',
     });
 };
 

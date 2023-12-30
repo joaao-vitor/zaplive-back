@@ -15,12 +15,31 @@ model User {
   email             String  @unique
   username          String  @unique
   password          String  @db.Text
-  imageUrl          String? @db.Text
+  imageUrl          String? @default("https://res.cloudinary.com/dljee1je7/image/upload/v1701215484/file-upload/kizxdilzoigomuwnfodm.png") @db.Text
   bio               String? @db.Text
   verificationToken String  @db.Text
   isVerified        Boolean @default(false)
 
+  stream Stream?
+
   token Token?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Stream {
+  id           String  @id @default(uuid())
+  name         String  @db.Text
+  thumbnailUrl String? @db.Text
+
+  isLive Boolean @default(false)
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Token {
